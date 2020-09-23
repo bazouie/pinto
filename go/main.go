@@ -1,21 +1,10 @@
 // Note, for this to work at least 1 commit is needed, so you if you use this
 // after creating a repository you might want to make sure you set `AutoInit` to
-// `true`.
+// `true`. It could be more!
 package main
 
 import (
-	"context"
-	"errors"
 	"flag"
-	"fmt"
-	"io/ioutil"
-	"log"
-	"os"
-	"strings"
-	"time"
-
-	"github.com/google/go-github/v32/github"
-	"golang.org/x/oauth2"
 )
 
 var (
