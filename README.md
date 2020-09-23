@@ -1,2 +1,5 @@
 # pinto
-This is Pinto project!
+
+Maintainer:
+
+Boomba!

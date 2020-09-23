@@ -1,0 +1,216 @@
+$ dev kubectl describe pod/property-api-5996fdf65c-d8fzb -n triforce
+Name:         property-api-5996fdf65c-d8fzb
+Namespace:    triforce
+Priority:     0
+Node:         ip-10-38-72-62.us-west-2.compute.internal/10.38.72.62
+Start Time:   Thu, 17 Sep 2020 11:13:43 -0700
+Labels:       app=property-api
+              pod-template-hash=5996fdf65c
+              product=property
+              team=triforce
+Annotations:  kubernetes.io/psp: eks.privileged
+              sidecar.istio.io/status:
+                {"version":"2696c96840179bdcd8f86ed60a643396f0cb250f56458b46a7fc667e6c75ef7f","initContainers":["istio-init"],"containers":["istio-proxy"]...
+Status:       Running
+IP:           10.38.73.212
+IPs:
+  IP:           10.38.73.212
+Controlled By:  ReplicaSet/property-api-5996fdf65c
+Init Containers:
+  istio-init:
+    Container ID:  docker://7ef428e37b68f87c05606005b84f8df29908e90e1bc7e3d0ceeb990d5f9d5a2f
+    Image:         zgcore-cte-docker.jfrog.io/istio/proxy_init:1.3.5
+    Image ID:      docker-pullable://zgcore-cte-docker.jfrog.io/istio/proxy_init@sha256:8278995c58eef8cd4ba32cb8756e2b93a09708e39fc9c0381e90c8a4fb62a042
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      -p
+      15001
+      -z
+      15006
+      -u
+      1337
+      -m
+      REDIRECT
+      -i
+      *
+      -x
+
+      -b
+      *
+      -d
+      15020
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Thu, 17 Sep 2020 11:13:45 -0700
+      Finished:     Thu, 17 Sep 2020 11:13:46 -0700
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  50Mi
+    Requests:
+      cpu:     10m
+      memory:  10Mi
+    Environment:
+      AWS_ROLE_ARN:                 arn:aws:iam::236012178310:role/tf-property
+      AWS_WEB_IDENTITY_TOKEN_FILE:  /var/run/secrets/eks.amazonaws.com/serviceaccount/token
+    Mounts:
+      /var/run/secrets/eks.amazonaws.com/serviceaccount from aws-iam-token (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from property-token-k94nb (ro)
+Containers:
+  property:
+    Container ID:  docker://22e72f5b9f29c6e896ac5247eaf3c468d6e754bff6759752d80ad4df3ea6d857
+    Image:         ctet-docker.artifactory.zgtools.net/triforce/property:3c9f6c6f
+    Image ID:      docker-pullable://ctet-docker.artifactory.zgtools.net/triforce/property@sha256:b625a446c6e1cb0173117854a346ea28298b9e6bac5ee2fa0401e5a202f72bfe
+    Port:          80/TCP
+    Host Port:     0/TCP
+    Args:
+      api
+    State:          Running
+      Started:      Thu, 17 Sep 2020 11:14:01 -0700
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    2
+      Started:      Thu, 17 Sep 2020 11:13:48 -0700
+      Finished:     Thu, 17 Sep 2020 11:13:48 -0700
+    Ready:          True
+    Restart Count:  2
+    Limits:
+      cpu:     1
+      memory:  4Gi
+    Requests:
+      cpu:      500m
+      memory:   2Gi
+    Liveness:   http-get http://:15020/app-health/property/livez delay=5s timeout=5s period=30s #success=1 #failure=3
+    Readiness:  http-get http://:15020/app-health/property/readyz delay=5s timeout=5s period=30s #success=1 #failure=3
+    Environment:
+      CI_PIPELINE_ID:               145547
+      CI_DATETIME:                  2020-09-17T18:11:30Z+0000
+      AWS_ROLE_ARN:                 arn:aws:iam::236012178310:role/tf-property
+      AWS_WEB_IDENTITY_TOKEN_FILE:  /var/run/secrets/eks.amazonaws.com/serviceaccount/token
+    Mounts:
+      /config/config.common.json from property-common-config (ro,path="config.common.json")
+      /config/config.json from property-config (ro,path="config.json")
+      /config/secrets.common.json from triforce-common-secrets (ro,path="secrets.common.json")
+      /var/run/secrets/eks.amazonaws.com/serviceaccount from aws-iam-token (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from property-token-k94nb (ro)
+  istio-proxy:
+    Container ID:  docker://30a9885abb02acb1f1b5a77ea8d6532593360a16344c4a1f1d3c9156fb9048ea
+    Image:         zgcore-cte-docker.jfrog.io/istio/proxyv2:1.3.5
+    Image ID:      docker-pullable://zgcore-cte-docker.jfrog.io/istio/proxyv2@sha256:245b1b40003654e9a9e3757196fa3cb506439cf8c98792c1552300528d8aea14
+    Port:          15090/TCP
+    Host Port:     0/TCP
+    Args:
+      proxy
+      sidecar
+      --domain
+      $(POD_NAMESPACE).svc.cluster.local
+      --configPath
+      /etc/istio/proxy
+      --binaryPath
+      /usr/local/bin/envoy
+      --serviceCluster
+      property-api.$(POD_NAMESPACE)
+      --drainDuration
+      45s
+      --parentShutdownDuration
+      1m0s
+      --discoveryAddress
+      istio-pilot.istio-system:15010
+      --datadogAgentAddress
+      $(HOST_IP):8126
+      --dnsRefreshRate
+      300s
+      --connectTimeout
+      10s
+      --proxyAdminPort
+      15000
+      --concurrency
+      2
+      --controlPlaneAuthPolicy
+      NONE
+      --statusPort
+      15020
+      --applicationPorts
+      80
+    State:          Running
+      Started:      Thu, 17 Sep 2020 11:13:47 -0700
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     256m
+      memory:  512Mi
+    Requests:
+      cpu:      25m
+      memory:   128Mi
+    Readiness:  http-get http://:15020/healthz/ready delay=1s timeout=1s period=2s #success=1 #failure=30
+    Environment:
+      POD_NAME:                          property-api-5996fdf65c-d8fzb (v1:metadata.name)
+      ISTIO_META_POD_PORTS:              [
+                                             {"containerPort":80,"protocol":"TCP"}
+                                         ]
+      ISTIO_META_CLUSTER_ID:             Kubernetes
+      POD_NAMESPACE:                     triforce (v1:metadata.namespace)
+      INSTANCE_IP:                        (v1:status.podIP)
+      SERVICE_ACCOUNT:                    (v1:spec.serviceAccountName)
+      HOST_IP:                            (v1:status.hostIP)
+      ISTIO_META_POD_NAME:               property-api-5996fdf65c-d8fzb (v1:metadata.name)
+      ISTIO_META_CONFIG_NAMESPACE:       triforce (v1:metadata.namespace)
+      SDS_ENABLED:                       false
+      ISTIO_META_INTERCEPTION_MODE:      REDIRECT
+      ISTIO_META_INCLUDE_INBOUND_PORTS:  80
+      ISTIO_METAJSON_ANNOTATIONS:        {"kubernetes.io/psp":"eks.privileged"}
+
+      ISTIO_METAJSON_LABELS:             {"app":"property-api","pod-template-hash":"5996fdf65c","product":"property","team":"triforce"}
+
+      ISTIO_META_WORKLOAD_NAME:          property-api
+      ISTIO_META_OWNER:                  kubernetes://api/apps/v1/namespaces/triforce/deployments/property-api
+      ISTIO_KUBE_APP_PROBERS:            {"/app-health/property/livez":{"path":"/api/health","port":80,"scheme":"HTTP"},"/app-health/property/readyz":{"path":"/api/health","port":80,"scheme":"HTTP"}}
+      AWS_ROLE_ARN:                      arn:aws:iam::236012178310:role/tf-property
+      AWS_WEB_IDENTITY_TOKEN_FILE:       /var/run/secrets/eks.amazonaws.com/serviceaccount/token
+    Mounts:
+      /etc/certs/ from istio-certs (ro)
+      /etc/istio/proxy from istio-envoy (rw)
+      /var/run/secrets/eks.amazonaws.com/serviceaccount from aws-iam-token (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from property-token-k94nb (ro)
+Conditions:
+  Type              Status
+  Initialized       True
+  Ready             True
+  ContainersReady   True
+  PodScheduled      True
+Volumes:
+  aws-iam-token:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  86400
+  property-config:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      property-config
+    Optional:  false
+  property-common-config:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      property-common-config
+    Optional:  false
+  triforce-common-secrets:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  triforce-common-secrets
+    Optional:    false
+  property-token-k94nb:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  property-token-k94nb
+    Optional:    false
+  istio-envoy:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     Memory
+    SizeLimit:  <unset>
+  istio-certs:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  istio.property
+    Optional:    true
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:          <none>
